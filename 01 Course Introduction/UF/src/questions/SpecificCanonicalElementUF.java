@@ -1,6 +1,8 @@
 package questions;
 
 
+
+
 public class SpecificCanonicalElementUF {
     protected int[] size = null;
 
