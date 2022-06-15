@@ -8,7 +8,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    public static final double CONFIDENCE_95 = 1.96;
+    private static final double CONFIDENCE_95 = 1.96;
     private final int num;
     private final int trials;
     private final double[] thresholds;
@@ -52,11 +52,23 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-       return this.mean() - (CONFIDENCE_95 / Math.sqrt(trials));
+        return this.mean() - (CONFIDENCE_95 / Math.sqrt(trials));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
         return this.mean() + (CONFIDENCE_95 / Math.sqrt(trials));
+    }
+
+    public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        int t = Integer.parseInt(args[1]);
+
+        PercolationStats percolationStats = new PercolationStats(n, t);
+
+        System.out.println("mean\t = " + percolationStats.mean());
+        System.out.println("stddev\t = " + percolationStats.stddev());
+        System.out.println("95% confidence interval\t = [ " + percolationStats.confidenceLo() + ", "
+                                   + percolationStats.confidenceHi() + " ]");
     }
 }

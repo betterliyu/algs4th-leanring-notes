@@ -29,7 +29,7 @@ public class Percolation {
         this.checkIndices(row, col);
 
         openedCount++;
-        int currentIndex = this.convertToIndex(row, col);;
+        int currentIndex = this.convertToIndex(row, col);
         opened[currentIndex] = true;
         if (col != 1 && opened[currentIndex - 1]) {
             // union left
