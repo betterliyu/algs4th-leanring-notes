@@ -9,7 +9,6 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private static final double CONFIDENCE_95 = 1.96;
-    private final int num;
     private final int trials;
     private final double[] thresholds;
 
@@ -18,26 +17,30 @@ public class PercolationStats {
         if (n <= 0 || trials <= 0) {
             throw new IllegalArgumentException();
         }
-        Percolation percolation = new Percolation(n);
-        num = n;
+
         this.trials = trials;
         thresholds = new double[trials];
 
         for (int i = 0; i < trials; i++) {
-            // got a random site which is not opened
-            int randomIndex = StdRandom.uniform(1, num * num + 1);
-            while (percolation.isOpen(randomIndex / num + 1, randomIndex % num)) {
-                randomIndex = StdRandom.uniform(1, num * num + 1);
+            thresholds[i] = 0;
+            Percolation percolation = new Percolation(n);
+            while (!percolation.percolates()) {
+                // got a random site which is not opened
+                int randomIndex = StdRandom.uniform(1, n * n + 1);
+                int row = randomIndex % n == 0 ? randomIndex / n : randomIndex / n + 1;
+                int col = randomIndex % n == 0 ? n : randomIndex % n;
+                while (percolation.isOpen(row, col)) {
+                    randomIndex = StdRandom.uniform(1, n * n + 1);
+                    row = randomIndex % n == 0 ? randomIndex / n : randomIndex / n + 1;
+                    col = randomIndex % n == 0 ? n : randomIndex % n;
+                }
+                // open site
+                percolation.open(row, col);
             }
-            // open site
-            percolation.open(randomIndex / num + 1, randomIndex % num);
-            if (percolation.percolates()) {
-                // log threshold if it is percolates
-                thresholds[i] = percolation.numberOfOpenSites() / num * num * 1.0;
-            }
+            // log threshold if it is percolates
+            thresholds[i] = percolation.numberOfOpenSites() / (n * n * 1.0);
+
         }
-
-
     }
 
     // sample mean of percolation threshold
